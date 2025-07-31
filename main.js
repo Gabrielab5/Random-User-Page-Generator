@@ -5,6 +5,7 @@ class RUPG {
         this.userLocation = document.getElementById('user-location');
         this.friendsList = document.getElementById('friends-list');
         this.generateButton = document.getElementById('generate-user-btn');
+        this.quoteText = document.getElementById('favorite-quote');
         this.addEventListeners();
     }
 
@@ -30,6 +31,8 @@ class RUPG {
                 const friends = data.results.slice(1,7);
                 this.updateUser(user);
                 this.updateFriendsList(friends);
+                this.generateQuote();
+
             } else console.warn('No user data recieved from API');
         } catch(error){
             this.userName.textContent = 'Error loading user!';
@@ -38,6 +41,19 @@ class RUPG {
         } finally {
             this.generateButton.disabled = false;
             this.generateButton.textContent = 'Generate New User';
+        }
+    }
+
+    async generateQuote() {
+        try {
+            const response = await fetch('https://api.kanye.rest');
+            if(!response.ok) throw new Error(`Http error: ${response.status}`);
+            const data = await response.json();
+            this.quoteText.textContent = data.quote;
+            this.quoteText.setAttribute('data-author', data.author);
+        } catch(error) {
+            console.error('Error fetching quote:', error);
+            this.quoteText.textContent = 'Failed to load quote.';
         }
     }
 
