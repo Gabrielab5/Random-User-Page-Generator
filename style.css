@@ -152,7 +152,7 @@ blockquote footer {
     border-top: 1px solid #eee;
 }
 
-#generate-user-btn {
+.button{
     background-color: #4CAF50; 
     color: white;
     padding: 12px 25px;
@@ -160,11 +160,12 @@ blockquote footer {
     border-radius: 8px;
     font-size: 1.1em;
     cursor: pointer;
+    margin:5px;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#generate-user-btn:hover {
+.button:hover {
     background-color: #45a049;
     transform: translateY(-2px);
 }
