@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random User Page Generator </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="profile-header">
+            <div class="profile-avatar">
+                <img id="user-avatar"  alt="User Avatar">
+            </div>
+            <div class="profile-info">
+                <h2 id="user-name"></h2>
+                <p id="user-location"><i class="fas fa-map-marker-alt"></i> City, Country</p>
+            </div>
+        </header>
+
+        <main class="profile-content">
+            <section class="main-sections">
+                <div class="section-card">
+                    <h3>Favorite Quote</h3>
+                    <blockquote id="favorite-quote">       
+                        <footer id="quote-author"></footer>
+                    </blockquote>
+                </div>
+
+                <div class="section-card">
+                    <h3>Favorite Pokemon</h3>
+                    <div class="pokemon-section">
+                        <img id="pokemon-image" src="https://placehold.co/80x80/D0E0F0/000000?text=Pokemon" alt="Favorite Pokemon">
+                        <span id="pokemon-name"></span>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h3>About Me</h3>
+                    <p id="about-me"> </p>
+                </div>
+            </section>
+
+            <aside class="sidebar-sections">
+                <div class="section-card friends-list">
+                    <h3>Friends</h3>
+                    <ul id="friends-list">
+                        <li>Friend </li>
+                    </ul>
+                </div>
+            </aside>
+        </main>
+
+        <footer class="profile-footer">
+            <button id="generate-user-btn">Generate New User</button>
+        </footer>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

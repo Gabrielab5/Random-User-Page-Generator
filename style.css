@@ -1,0 +1,187 @@
+body {
+    font-family: 'Inter', sans-serif; 
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5; 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; 
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 960px; 
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-header {
+    background-color: #4267B2; 
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.profile-avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
+    object-fit: cover;
+}
+
+.profile-info h2 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.profile-info p {
+    margin: 5px 0 0;
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.profile-info i {
+    margin-right: 5px;
+}
+
+.profile-content {
+    display: flex;
+    flex-wrap: wrap; 
+    padding: 20px;
+    gap: 20px;
+}
+
+.main-sections {
+    flex: 3; 
+    min-width: 300px; 
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-sections {
+    flex: 1; 
+    min-width: 200px; 
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.section-card h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+blockquote {
+    margin: 0;
+    font-style: italic;
+    color: #555;
+    border-left: 4px solid #4267B2;
+    padding-left: 10px;
+}
+
+blockquote footer {
+    margin-top: 10px;
+    text-align: right;
+    font-size: 0.9em;
+    color: #777;
+}
+
+.pokemon-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.pokemon-section img {
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    padding: 5px;
+}
+
+.pokemon-section span {
+    font-weight: bold;
+    color: #333;
+}
+
+.friends-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.friends-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    color: #555;
+}
+
+.friends-list li:last-child {
+    border-bottom: none;
+}
+
+.profile-footer {
+    padding: 20px;
+    text-align: center;
+    background-color: #f8f8f8;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-top: 1px solid #eee;
+}
+
+#generate-user-btn {
+    background-color: #4CAF50; 
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#generate-user-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+#generate-user-btn:active {
+    background-color: #3e8e41;
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .profile-content {
+        flex-direction: column;
+    }
+
+    .main-sections, .sidebar-sections {
+        min-width: unset; 
+        width: 100%;
+    }
+}
