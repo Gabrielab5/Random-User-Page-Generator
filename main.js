@@ -6,6 +6,8 @@ class RUPG {
         this.friendsList = document.getElementById('friends-list');
         this.generateButton = document.getElementById('generate-user-btn');
         this.quoteText = document.getElementById('favorite-quote');
+        this.pokemonImage = document.getElementById('pokemon-image');
+        this.pokemonName = document.getElementById('pokemon-name');
         this.addEventListeners();
     }
 
@@ -31,7 +33,8 @@ class RUPG {
                 const friends = data.results.slice(1,7);
                 this.updateUser(user);
                 this.updateFriendsList(friends);
-                this.generateQuote();
+                await this.generateQuote();
+                await this.generatePokemon();
 
             } else console.warn('No user data recieved from API');
         } catch(error){
@@ -54,6 +57,32 @@ class RUPG {
         } catch(error) {
             console.error('Error fetching quote:', error);
             this.quoteText.textContent = 'Failed to load quote.';
+        }
+    }
+
+    async generatePokemon() {
+        try {
+            const countResponse = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1'); 
+            if (!countResponse.ok) throw new Error(`HTTP error! status: ${countResponse.status}`);
+            const countData = await countResponse.json();
+            const totalPokemon = countData.count;
+
+            const randomPokemonId = Math.floor(Math.random() * totalPokemon) + 1; 
+
+            const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomPokemonId}/`);
+            if (!pokemonResponse.ok) throw new Error(`HTTP error! status: ${pokemonResponse.status}`);
+            const pokemonData = await pokemonResponse.json();
+
+            console.log('Pokemon API Response Data:', pokemonData); 
+
+            this.pokemonImage.src = pokemonData.sprites.front_default; 
+            this.pokemonImage.alt = pokemonData.name;
+            this.pokemonName.textContent = pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1); 
+        } catch(error) {
+            console.error('Error fetching Pokemon:', error);
+            this.pokemonImage.src = 'https://placehold.co/80x80/D0E0F0/000000?text=Error';
+            this.pokemonImage.alt = 'Error loading Pokemon';
+            this.pokemonName.textContent = 'Failed to load Pokemon.';
         }
     }
 
