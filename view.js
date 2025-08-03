@@ -11,8 +11,8 @@ export class View {
         this.pokemonNameEl = document.getElementById('pokemon-name');
         this.aboutMeEl = document.getElementById('about-me');
         this.saveButtonEl = document.getElementById('save-user-btn');
-        this.loadButtonEl = document.getElementById('load-user-btn');
         this.statusMessageEl = document.getElementById('status-message');
+        this.savedUsersDropdownEl = document.getElementById('saved-users-dropdown');
     }
 
     renderUser(user) {
@@ -59,6 +59,21 @@ export class View {
     renderAboutMe(text) {
         this.aboutMeEl.textContent = text;
     }
+
+    renderSavedUsersDropdown(userList, selectedId = '') {
+        if (!this.savedUsersDropdownEl) return;
+        this.savedUsersDropdownEl.innerHTML = '<option value="">Select a saved user</option>';
+        
+        userList.forEach(user => {
+            const option = document.createElement('option');
+            option.value = user.id;
+            option.textContent = user.name;
+            if (user.id === selectedId)  option.selected = true;
+            this.savedUsersDropdownEl.appendChild(option);
+        });
+    }
+
+    getSelectedUserId() { return this.savedUsersDropdownEl ? this.savedUsersDropdownEl.value : ''; }
 
     setButtonState(buttonEl, disabled, text) {
         if (buttonEl) {

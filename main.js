@@ -5,5 +5,5 @@ import { Controller } from './controller.js';
 document.addEventListener('DOMContentLoaded', () => {
     const model = new Model();
     const view = new View();
-    const controller = new Controller(model, view);
+    new Controller(model, view);
 });

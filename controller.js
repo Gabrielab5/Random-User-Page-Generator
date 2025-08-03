@@ -5,12 +5,15 @@ export class Controller {
 
         this.view.generateButton.addEventListener('click', this.handleGenerateUser.bind(this));
         this.view.saveButtonEl.addEventListener('click', this.handleSaveUser.bind(this));
-        this.view.loadButtonEl.addEventListener('click', this.handleLoadUser.bind(this));
+        this.view.savedUsersDropdownEl.addEventListener('change', this.handleLoadUser.bind(this));
 
         this.init();
     }  
     
-    init() { this.handleGenerateUser(); }
+    init() { 
+        this.handleGenerateUser();
+        this._populateSavedUsersDropdown();
+     }
 
     async handleGenerateUser() {
         this.view.setButtonState(this.view.generateButton, true, 'Generating...');
@@ -20,12 +23,7 @@ export class Controller {
             this.view.displayMessage('New user page generated!', 'success');
         } catch (error) {
             console.error('Controller: Error generating user page:', error);
-            this.view.displayMessage('Failed to generate user page.', 'error');
-            this.view.renderUser(null);
-            this.view.renderFriends([]);
-            this.view.renderQuote({ text: 'Failed to load quote.', author: '' });
-            this.view.renderPokemon({ name: 'Error', image: 'https://placehold.co/80x80/D0E0F0/000000?text=Error' });
-            this.view.renderAboutMe('Failed to load "About Me" text.');
+            this._renderErrorPage();
         } finally {
             this.view.setButtonState(this.view.generateButton, false, 'Generate New User');
         }
@@ -38,22 +36,30 @@ export class Controller {
             return;
         }
         try {
-            this.model.saveData(dataToSave);
+            const savedUserId = this.model.saveUser(dataToSave);
             this.view.displayMessage('User page saved successfully!', 'success');
+            this._populateSavedUsersDropdown(savedUserId);
         } catch (error) {
             console.error('Controller: Error saving user page:', error);
             this.view.displayMessage('Error saving user page.', 'error');
+            alert('Error saving user page.');
         }
     }
 
     handleLoadUser() {
+        const selectedUserId = this.view.getSelectedUserId();
+        if (!selectedUserId) {
+            this.view.displayMessage('Please select a user to load from the dropdown.', 'info');
+            return;
+        }
         try {
-            const loadedData = this.model.loadData();
+            const loadedData = this.model.loadUser(selectedUserId);
             if (loadedData) {
                 this._renderCurrentPage(); 
                 this.view.displayMessage('User page loaded successfully!', 'success');
             } else {
                 this.view.displayMessage('No saved user page found.', 'info');
+                this._populateSavedUsersDropdown();
             }
         } catch (error) {
             console.error('Controller: Error loading user page:', error);
@@ -68,5 +74,18 @@ export class Controller {
         this.view.renderQuote(quote);
         this.view.renderPokemon(pokemon);
         this.view.renderAboutMe(aboutMe);
+    }
+
+    _renderErrorPage() {
+        this.view.renderUser(null);
+        this.view.renderFriends([]);
+        this.view.renderQuote({ text: 'Failed to load quote.', author: '' });
+        this.view.renderPokemon({ name: 'Error', image: 'https://placehold.co/80x80/D0E0F0/000000?text=Error' });
+        this.view.renderAboutMe('Failed to load "About Me" text.');
+    }
+
+    _populateSavedUsersDropdown(selectedId = '') {
+        const savedUserList = this.model.getSavedUserList();
+        this.view.renderSavedUsersDropdown(savedUserList, selectedId);
     }
 }

@@ -7,6 +7,8 @@ export class Model {
         this.currentQuote = { text: '', author: '' };
         this.currentPokemon = { name: '', image: '' };
         this.currentAboutMe = '';
+        this.allSavedUsers = {};
+        this._loadAllSavedUsersFromStorage();
     }
 
     //Fetches all necessary data from various APIs.
@@ -55,13 +57,17 @@ export class Model {
 
         } catch (error) {
             console.error('Model: Error fetching all data:', error);
-            this.currentMainUser = null;
-            this.currentFriends = [];
-            this.currentQuote = { text: 'Failed to load quote.', author: '' };
-            this.currentPokemon = { name: 'Error', image: 'https://placehold.co/80x80/D0E0F0/000000?text=Error' };
-            this.currentAboutMe = 'Failed to load "About Me" text.';
+            this._resetCurrentDataOnError()
             throw error; 
         }
+    }
+
+    _resetCurrentDataOnError() {
+        this.currentMainUser = null;
+        this.currentFriends = [];
+        this.currentQuote = { text: 'Failed to load quote.', author: '' };
+        this.currentPokemon = { name: 'Error', image: 'https://placehold.co/80x80/D0E0F0/000000?text=Error' };
+        this.currentAboutMe = 'Failed to load "About Me" text.';
     }
 
     // Helper to check fetch response and parse JSON.
@@ -99,21 +105,22 @@ export class Model {
         };
     }
 
-    saveData(data) {
-        try {
-            localStorage.setItem('rupgSavedUser', JSON.stringify(data));
-            console.log('Model: User page saved successfully to local storage!');
-        } catch (error) {
-            console.error('Model: Error saving user page to local storage:', error);
-            throw error; 
+    saveUser(data) {
+        if (!data.mainUser) {
+            console.warn('Model: No current user data to save.');
+            throw new Error('No current user data to save.');
         }
+        const userId = data.mainUser.login.uuid || `user-${Date.now()}`; 
+        this.allSavedUsers[userId] = data;
+        this._saveAllSavedUsersToStorage();
+        console.log(`Model: User "${data.mainUser.name.first} ${data.mainUser.name.last}" saved with ID: ${userId}`);
+        return userId;
     }
 
-    loadData() {
+    loadUser(userId) {
         try {
-            const savedDataString = localStorage.getItem('rupgSavedUser');
-            if (savedDataString) {
-                const loadedData = JSON.parse(savedDataString);
+            const loadedData = this.allSavedUsers[userId];
+            if (loadedData) {
                 this.currentMainUser = loadedData.mainUser;
                 this.currentFriends = loadedData.friends;
                 this.currentQuote = loadedData.quote;
@@ -128,6 +135,37 @@ export class Model {
         } catch (error) {
             console.error('Model: Error loading user page from local storage:', error);
             throw error; 
+        }
+    }
+
+     getSavedUserList() {
+        return Object.keys(this.allSavedUsers).map(id => {
+            const user = this.allSavedUsers[id].mainUser;
+            return {
+                id: id,
+                name: user ? `${user.name.first} ${user.name.last}` : `Unnamed User (${id})`
+            };
+        });
+    }
+
+    _saveAllSavedUsersToStorage() {
+        try {
+            localStorage.setItem('rupgAllSavedUsers', JSON.stringify(this.allSavedUsers));
+        } catch (error) {
+            console.error('Model: Error saving all users to local storage:', error);
+            throw error;
+        }
+    }
+
+    _loadAllSavedUsersFromStorage() {
+        try {
+            const savedDataString = localStorage.getItem('rupgAllSavedUsers');
+            if (savedDataString) {
+                this.allSavedUsers = JSON.parse(savedDataString);
+            }
+        } catch (error) {
+            console.error('Model: Error loading all users from local storage:', error);
+            this.allSavedUsers = {}; 
         }
     }
 }
